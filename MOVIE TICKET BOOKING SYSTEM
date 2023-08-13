@@ -1,0 +1,95 @@
+#include <iostream>
+#include <vector>
+
+using namespace std;
+
+const int NUM_ROWS = 5;
+const int NUM_COLS = 10;
+const double TICKET_PRICE = 249.0;
+
+class Seat {
+public:
+    bool isBooked = false;
+};
+
+class Movie {
+public:
+    string title;
+    vector<vector<Seat>> seats;
+
+    Movie(string _title) : title(_title) {
+        seats.resize(NUM_ROWS, vector<Seat>(NUM_COLS));
+    }
+
+    void displaySeats() {
+        cout << "🎬 " << title << " 🎬" << endl;
+        cout << "---------------------------" << endl;
+
+        for (int i = 1; i < NUM_ROWS; ++i) {
+            for (int j = 1; j < NUM_COLS; ++j) {
+                if (seats[i][j].isBooked) {
+                    cout << " [B] ";
+                } else {
+                    cout << " [_] ";
+                }
+            }
+            cout << endl;
+        }
+
+        cout << "---------------------------" << endl;
+    }
+
+    bool bookSeat(int row, int col) {
+        if (row >= 0 && row < NUM_ROWS && col >= 0 && col < NUM_COLS) {
+            if (!seats[row][col].isBooked) {
+                seats[row][col].isBooked = true;
+                return true;
+            }
+        }
+        return false;
+    }
+};
+
+int main() {
+    Movie movie("🎥 OMG:2  🎥");
+
+    while (true) {
+        cout << "🎟️ Welcome to Movie Ticket Booking 🎟️" << endl;
+        cout << "-------------------------------------" << endl;
+        cout << "1. View Movie Listings" << endl;
+        cout << "2. Book a Ticket" << endl;
+        cout << "3. Exit" << endl;
+        cout << "-------------------------------------" << endl;
+
+        int choice;
+        cin >> choice;
+
+        switch (choice) {
+            case 1:
+                movie.displaySeats();
+                break;
+
+            case 2:
+                movie.displaySeats();
+                int row, col;
+                cout << "Enter row and column of the seat you want to book: ";
+                cin >> row >> col;
+
+                if (movie.bookSeat(row, col)) {
+                    cout << "Seat booked successfully! Total cost: ₹" << TICKET_PRICE << endl;
+                } else {
+                    cout << "Seat is already booked or invalid selection." << endl;
+                }
+                break;
+
+            case 3:
+                cout << "Thank you for using our booking system!" << endl;
+                return 0;
+
+            default:
+                cout << "Invalid choice. Please try again." << endl;
+        }
+    }
+
+    return 0;
+}
